@@ -115,7 +115,7 @@ Math.floor(Math.random()*(i+1));
             [array[i],array[j]]={array[j],array[i]];// 要素を交換}
                                 }
 
-shuffleArray(cards);//アプリ起動時にカードをシャッフルする
+shuffleArray(cards);//　アプリ起動時にカードをシャッフルする
             
 let currentCardIndex = 0; // 現在表示しているカードのインデックス
 
@@ -136,6 +136,7 @@ nextCardBtn.addEventListener('click', () => {
     currentCardIndex++;
     if (currentCardIndex >= cards.length) {
         currentCardIndex = 0; // 全てのカードを見たら最初に戻る
+          shuffleArray(cards);
     }
     updateCard();
 });
