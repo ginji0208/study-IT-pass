@@ -1,23 +1,24 @@
+/* --- bodyとh1のスタイルは変更なし --- */
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* フォントを調整 */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     display: flex;
-    flex-direction: column; /* 縦方向に要素を並べる */
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background-color: #e0f2f7; /* 背景色を少し変更 */
+    background-color: #e0f2f7;
     margin: 0;
-    padding: 20px; /* 全体的な余白 */
+    padding: 20px;
     box-sizing: border-box;
 }
 
 h1 {
-    color: #0056b3; /* ヘッダーの色 */
+    color: #0056b3;
     margin-bottom: 30px;
     font-size: 2.2em;
 }
 
-/* 統計情報エリアのスタイル */
+/* --- 統計情報エリアのスタイルは変更なし --- */
 .stats-container {
     background-color: #fff;
     padding: 15px 30px;
@@ -25,10 +26,10 @@ h1 {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
     margin-bottom: 25px;
     display: flex;
-    gap: 30px; /* 各統計情報の間にスペース */
+    gap: 30px;
     font-size: 1.1em;
     color: #333;
-    flex-wrap: wrap; /* 小さい画面で折り返す */
+    flex-wrap: wrap;
     justify-content: center;
 }
 
@@ -40,78 +41,111 @@ h1 {
 
 .stats-container span {
     font-weight: bold;
-    color: #007bff; /* 統計値の色 */
+    color: #007bff;
     margin-left: 8px;
     font-size: 1.2em;
 }
 
-
 .container {
     text-align: center;
     display: flex;
-    flex-direction: column; /* カードとボタンを縦に並べる */
+    flex-direction: column;
     align-items: center;
 }
 
 .card {
     background-color: #fff;
-    border-radius: 15px; /* 角を丸く */
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15); /* 影を強調 */
-    width: 350px; /* 幅を少し広げる */
-    height: 220px; /* 高さを少し高く */
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    width: 350px;
+    height: 220px;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 30px; /* ボタンとの間にスペース */
+    margin-bottom: 30px;
     cursor: pointer;
-    perspective: 1000px;
-    position: relative;
-    transform-style: preserve-3d;
-    transition: transform 0.6s ease-in-out; /* スムーズなアニメーション */
+    /* --- 以下の3D関連のプロパティを削除またはコメントアウト --- */
+    /* perspective: 1000px; */
+    /* position: relative; */
+    /* transform-style: preserve-3d; */
+
+    /* --- フェードエフェクトのためのプロパティを追加 --- */
+    opacity: 1; /* 初期状態は完全に表示 */
+    transition: opacity 0.5s ease-in-out; /* 透明度の変化に0.5秒のアニメーション */
+    position: relative; /* 子要素のposition: absoluteのために必要 */
+    overflow: hidden; /* コンテンツがはみ出さないように */
 }
 
-/* カードがめくられた際のスタイル */
-.card.flipped {
-    transform: rotateY(180deg);
+/* --- カードがフェードアウトする際のクラス --- */
+.card.fade-out {
+    opacity: 0;
 }
+
+/* --- カードがフェードインする際のクラス (内容表示後に付けられる) --- */
+.card.fade-in {
+    opacity: 1;
+}
+
+/* --- .card.flipped のスタイルを削除またはコメントアウト --- */
+/* .card.flipped {
+    transform: rotateY(180deg);
+} */
 
 .card .question,
 .card .answer {
-    position: absolute;
-    backface-visibility: hidden;
+    position: absolute; /* 親要素の.cardに対して絶対配置 */
+    /* --- backface-visibility を削除またはコメントアウト --- */
+    /* backface-visibility: hidden; */
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
     height: 100%;
-    padding: 25px; /* パディングを調整 */
+    padding: 25px;
     box-sizing: border-box;
-    border-radius: 15px; /* 角を丸く */
+    border-radius: 15px;
     text-align: center;
-    font-size: 1.4em; /* フォントサイズを調整 */
+    font-size: 1.4em;
     line-height: 1.5;
+    /* --- transform を削除またはコメントアウト --- */
+    /* transform: rotateY(0deg); */
+    /* transition: transform 0.6s ease-in-out; */ /* フリップアニメーション用なので削除 */
+
+    /* --- フェードエフェクト用に追加・調整 --- */
+    opacity: 1; /* 初期状態は表示 */
+    transition: opacity 0.5s ease-in-out; /* フェードアニメーション用 */
 }
 
 .card .question {
-    transform: rotateY(0deg);
-    background-color: #e3f2fd; /* 質問の背景色 */
-    color: #212529; /* テキスト色 */
-    z-index: 2;
-    font-weight: 600; /* 太字に */
+    background-color: #e3f2fd;
+    color: #212529;
+    z-index: 2; /* questionが手前に来るように */
+    font-weight: 600;
 }
 
 .card .answer {
-    transform: rotateY(180deg);
-    background-color: #c8e6c9; /* 答えの背景色 */
-    color: #1a4d2e; /* テキスト色 */
-    z-index: 1;
+    background-color: #c8e6c9;
+    color: #1a4d2e;
+    z-index: 1; /* answerが奥に隠れるように */
     font-weight: 500;
+    /* 初期状態で非表示にする */
+    opacity: 0;
+    pointer-events: none; /* クリックイベントを無効にする */
 }
 
-/* コントロールボタンのスタイル */
+/* --- カードがめくられた際のquestion/answerの表示切り替えを変更 --- */
+/* JavaScriptで直接 opacity を切り替えるため、これらのクラスは不要になります */
+/* .card.flipped .question {
+    transform: rotateY(-180deg);
+}
+.card.flipped .answer {
+    transform: rotateY(0deg);
+} */
+
+/* --- コントロールボタンのスタイルは変更なし --- */
 .controls {
     display: flex;
-    gap: 15px; /* ボタン間のスペース */
+    gap: 15px;
     flex-wrap: wrap;
     justify-content: center;
 }
@@ -139,21 +173,21 @@ h1 {
 }
 
 #correct-btn {
-    background-color: #28a745; /* 緑色 */
+    background-color: #28a745;
 }
 #correct-btn:hover {
     background-color: #218838;
 }
 
 #incorrect-btn {
-    background-color: #dc3545; /* 赤色 */
+    background-color: #dc3545;
 }
 #incorrect-btn:hover {
     background-color: #c82333;
 }
 
 #nextCardBtn {
-    background-color: #6c757d; /* 灰色 */
+    background-color: #6c757d;
 }
 #nextCardBtn:hover {
     background-color: #5a6268;
