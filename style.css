@@ -1,82 +1,188 @@
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* フォントを調整 */
     display: flex;
+    flex-direction: column; /* 縦方向に要素を並べる */
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background-color: #f4f4f4;
+    background-color: #e0f2f7; /* 背景色を少し変更 */
     margin: 0;
+    padding: 20px; /* 全体的な余白 */
+    box-sizing: border-box;
 }
+
+h1 {
+    color: #0056b3; /* ヘッダーの色 */
+    margin-bottom: 30px;
+    font-size: 2.2em;
+}
+
+/* 統計情報エリアのスタイル */
+.stats-container {
+    background-color: #fff;
+    padding: 15px 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+    margin-bottom: 25px;
+    display: flex;
+    gap: 30px; /* 各統計情報の間にスペース */
+    font-size: 1.1em;
+    color: #333;
+    flex-wrap: wrap; /* 小さい画面で折り返す */
+    justify-content: center;
+}
+
+.stats-container p {
+    margin: 0;
+    display: flex;
+    align-items: center;
+}
+
+.stats-container span {
+    font-weight: bold;
+    color: #007bff; /* 統計値の色 */
+    margin-left: 8px;
+    font-size: 1.2em;
+}
+
 
 .container {
     text-align: center;
+    display: flex;
+    flex-direction: column; /* カードとボタンを縦に並べる */
+    align-items: center;
 }
 
 .card {
     background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 300px;
-    height: 200px;
+    border-radius: 15px; /* 角を丸く */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15); /* 影を強調 */
+    width: 350px; /* 幅を少し広げる */
+    height: 220px; /* 高さを少し高く */
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 30px; /* ボタンとの間にスペース */
     cursor: pointer;
-    perspective: 1000px; /* 3D効果のために必要 */
+    perspective: 1000px;
     position: relative;
-    transform-style: preserve-3d; /* 子要素も3D空間に配置されるようにする */
+    transform-style: preserve-3d;
+    transition: transform 0.6s ease-in-out; /* スムーズなアニメーション */
+}
+
+/* カードがめくられた際のスタイル */
+.card.flipped {
+    transform: rotateY(180deg);
 }
 
 .card .question,
 .card .answer {
     position: absolute;
-    backface-visibility: hidden; /* 裏面を見えなくする */
+    backface-visibility: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
     height: 100%;
-    padding: 20px;
+    padding: 25px; /* パディングを調整 */
     box-sizing: border-box;
-    transition: transform 0.6s;
+    border-radius: 15px; /* 角を丸く */
+    text-align: center;
+    font-size: 1.4em; /* フォントサイズを調整 */
+    line-height: 1.5;
 }
 
 .card .question {
-    transform: rotateY(0deg); /* 初期状態で正面を向く */
-    background-color: #f0f8ff; /* 質問の背景色 */
-    z-index: 2; /* 質問が答えの上に表示されるように */
-    font-size: 1.5em;
-    color: #333;
+    transform: rotateY(0deg);
+    background-color: #e3f2fd; /* 質問の背景色 */
+    color: #212529; /* テキスト色 */
+    z-index: 2;
+    font-weight: 600; /* 太字に */
 }
 
 .card .answer {
-    transform: rotateY(180deg); /* 初期状態で裏返す */
-    background-color: #e0f7fa; /* 答えの背景色 */
-    z-index: 1; /* 答えが質問の下に表示されるように */
-    font-size: 1.2em;
-    color: #007bff;
+    transform: rotateY(180deg);
+    background-color: #c8e6c9; /* 答えの背景色 */
+    color: #1a4d2e; /* テキスト色 */
+    z-index: 1;
+    font-weight: 500;
 }
 
-/* flashcardに'flipped'クラスが付いた時のスタイル */
-.card.flipped .question {
-    transform: rotateY(-180deg); /* 表面を奥に回転させる */
+/* コントロールボタンのスタイル */
+.controls {
+    display: flex;
+    gap: 15px; /* ボタン間のスペース */
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
-.card.flipped .answer {
-    transform: rotateY(0deg); /* 裏面を元に戻す */
-}
-
-#nextCardBtn {
+.controls button {
     background-color: #007bff;
     color: white;
     border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
+    padding: 12px 25px;
+    border-radius: 6px;
     cursor: pointer;
-    font-size: 1em;
+    font-size: 1.1em;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-#nextCardBtn:hover {
+.controls button:hover {
     background-color: #0056b3;
+    transform: translateY(-2px);
+}
+
+.controls button:active {
+    transform: translateY(0);
+}
+
+#correct-btn {
+    background-color: #28a745; /* 緑色 */
+}
+#correct-btn:hover {
+    background-color: #218838;
+}
+
+#incorrect-btn {
+    background-color: #dc3545; /* 赤色 */
+}
+#incorrect-btn:hover {
+    background-color: #c82333;
+}
+
+#nextCardBtn {
+    background-color: #6c757d; /* 灰色 */
+}
+#nextCardBtn:hover {
+    background-color: #5a6268;
+}
+
+button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
+
+@media (max-width: 600px) {
+    .card {
+        width: 90%;
+        height: 180px;
+    }
+    h1 {
+        font-size: 1.8em;
+    }
+    .stats-container {
+        font-size: 0.9em;
+        padding: 10px 20px;
+    }
+    .stats-container span {
+        font-size: 1em;
+    }
+    .controls button {
+        padding: 10px 18px;
+        font-size: 1em;
+    }
 }
