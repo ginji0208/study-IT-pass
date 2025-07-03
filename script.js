@@ -107,6 +107,15 @@ const cards = [
     { question: "NFTの技術的特徴は？", answer: "ブロックチェーン上で唯一性を証明する非代替性トークン。" }
 
 ]
+// 配列をシャッフルする関数(Fisher-Yatesシャッフルアルゴリズム)
+function shuffleArray(array){
+      for (let i=array.length-1;i>0;i--){
+            const j=
+Math.floor(Math.random()*(i+1));
+            [array[i],array[j]]={array[j],array[i]];// 要素を交換}
+                                }
+
+
 let currentCardIndex = 0; // 現在表示しているカードのインデックス
 
 // カードの内容を更新する関数
