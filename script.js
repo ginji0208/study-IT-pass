@@ -5,7 +5,7 @@ const nextCardBtn = document.getElementById('nextCardBtn');
 
 // 問題と答えのデータ
 const cards = [
-      { question: "CPUの役割は？", answer: "計算と制御を行うコンピュータの頭脳。" },
+    { question: "CPUの役割は？", answer: "計算と制御を行うコンピュータの頭脳。" },
     { question: "RAMの特徴は？", answer: "一時的にデータを保持し、電源オフで内容が消える。" },
     { question: "OSの機能は？", answer: "ハードウェアとソフトウェアを管理する基本ソフト。" },
     { question: "IPアドレスの用途は？", answer: "ネットワーク上の機器を識別する番号。" },
@@ -23,7 +23,7 @@ const cards = [
     { question: "5Gのメリットは？", answer: "超高速、超低遅延、多数同時接続。" },
     { question: "LANとWANの違いは？", answer: "LANは建物内など限定された範囲、WANは遠隔地を結ぶネットワーク。" },
     { question: "TCP/IPとは？", answer: "インターネットで使われる通信プロトコルの集合。" },
-    { question: "MACアドレスの役割は？", answer: "ネットワーク機器に割り当てられた物理的な識別番号。" },
+    { question: "MACアドレスの役割は？", "answer": "ネットワーク機器に割り当てられた物理的な識別番号。" },
     { question: "DNSの機能は？", answer: "ドメイン名をIPアドレスに変換するシステム。" },
     { question: "HTTPとHTTPSの違いは？", answer: "HTTPSはHTTPに暗号化機能（SSL/TLS）を追加し、安全性を高めたもの。" },
     { question: "Wi-Fiの利点は？", answer: "無線でインターネットに接続できる技術。" },
@@ -105,18 +105,19 @@ const cards = [
     { question: "環境関連法の例は？", answer: "廃棄物処理法、地球温暖化対策推進法など。" },
     { question: "インボイス制度の正式名称は？", answer: "適格請求書等保存方式。" },
     { question: "NFTの技術的特徴は？", answer: "ブロックチェーン上で唯一性を証明する非代替性トークン。" }
+];
 
-]
 // 配列をシャッフルする関数(Fisher-Yatesシャッフルアルゴリズム)
-function shuffleArray(array){
-      for (let i=array.length-1;i>0;i--){
-            const j=
-Math.floor(Math.random()*(i+1));
-            [array[i],array[j]]={array[j],array[i]];// 要素を交換}
-                                }
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        // ここで配列の要素を正しく交換します
+        [array[i], array[j]] = [array[j], array[i]]; 
+    }
+}
 
-shuffleArray(cards);//　アプリ起動時にカードをシャッフルする
-            
+shuffleArray(cards); // アプリ起動時にカードをシャッフルする
+
 let currentCardIndex = 0; // 現在表示しているカードのインデックス
 
 // カードの内容を更新する関数
@@ -136,11 +137,10 @@ nextCardBtn.addEventListener('click', () => {
     currentCardIndex++;
     if (currentCardIndex >= cards.length) {
         currentCardIndex = 0; // 全てのカードを見たら最初に戻る
-          shuffleArray(cards);
+        shuffleArray(cards); // 全てのカードを見たら再度シャッフル
     }
     updateCard();
 });
 
 // アプリ起動時に最初のカードを表示
 updateCard();
-
