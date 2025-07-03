@@ -25,6 +25,9 @@ body {
     cursor: pointer;
     perspective: 1000px; /* 3D効果のために必要 */
     position: relative;
+    /* --- 追加 --- */
+    transform-style: preserve-3d; /* 子要素も3D空間に配置されるようにする */
+    /* ------------ */
 }
 
 .card .question,
@@ -41,19 +44,38 @@ body {
     transition: transform 0.6s;
 }
 
+.card .question {
+    /* --- 追加 --- */
+    transform: rotateY(0deg); /* 初期状態で正面を向くように明示 */
+    background-color: #f0f8ff; /* 質問の背景色（元の色を適用） */
+    z-index: 2; /* 質問が答えの上に表示されるように */
+    /* ------------ */
+    font-size: 1.5em; /* .question の定義が下にもありますが、ここにまとめた方が分かりやすいです */
+    color: #333; /* .question の定義が下にもありますが、ここにまとめた方が分かりやすいです */
+}
+
 .card .answer {
     transform: rotateY(180deg); /* 初期状態で裏返す */
     background-color: #e0f7fa; /* 答えの背景色 */
+    /* --- 追加 --- */
+    z-index: 1; /* 答えが質問の下に表示されるように */
+    /* ------------ */
+    font-size: 1.2em; /* .answer の定義が下にもありますが、ここにまとめた方が分かりやすいです */
+    color: #007bff; /* .answer の定義が下にもありますが、ここにまとめた方が分かりやすいです */
 }
 
+
 .card.flipped .question {
-    transform: rotateY(180deg); /* 表面を裏返す */
+    transform: rotateY(-180deg); /* 表面を奥に回転させる */
 }
 
 .card.flipped .answer {
     transform: rotateY(0deg); /* 裏面を元に戻す */
 }
 
+/* 以下の .question と .answer の定義は、上記 .card .question と .card .answer に統合したため、
+   重複を避けるために削除しても問題ありません。もし異なるスタイルを適用したい場合は残してください。 */
+/*
 .question {
     font-size: 1.5em;
     color: #333;
@@ -63,6 +85,7 @@ body {
     font-size: 1.2em;
     color: #007bff;
 }
+*/
 
 #nextCardBtn {
     background-color: #007bff;
