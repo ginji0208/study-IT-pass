@@ -114,7 +114,7 @@ function shuffleArray(array){
 Math.floor(Math.random()*(i+1));
             [array[i],array[j]]={array[j],array[i]];// 要素を交換}
                                 }
-
+// アプリ起動時にカードをシャッフルするshuffleArray(cards);
 
 let currentCardIndex = 0; // 現在表示しているカードのインデックス
 
