@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>勉強アプリ</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="card" id="flashcard">
+            <div class="question" id="question">問題文が表示されます</div>
+            <div class="answer" id="answer">答えが表示されます</div>
+        </div>
+        <button id="nextCardBtn">次の問題</button>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
