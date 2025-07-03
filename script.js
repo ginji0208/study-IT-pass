@@ -5,12 +5,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const nextCardBtn = document.getElementById('nextCardBtn');
     const correctBtn = document.getElementById('correct-btn');
     const incorrectBtn = document.getElementById('incorrect-btn');
+    const feedbackMessageElement = document.getElementById('feedback-message'); // 新しく追加
 
     const answeredCountElement = document.getElementById('answered-count');
     const correctCountElement = document.getElementById('correct-count');
     const accuracyRateElement = document.getElementById('accuracy-rate');
 
     const cards = [
+        // 問題データはここに入ります。以前のものをそのまま使用してください。
         { question: "CPUの役割は？", answer: "計算と制御を行うコンピュータの頭脳。" },
         { question: "RAMの特徴は？", answer: "一時的にデータを保持し、電源オフで内容が消える。" },
         { question: "OSの機能は？", answer: "ハードウェアとソフトウェアを管理する基本ソフト。" },
@@ -117,6 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentCardIndex = 0;
     let answeredQuestionsCount = 0;
     let correctAnswersCount = 0;
+    let isShowingFeedback = false; // フィードバック表示中フラグ
 
     // 配列をシャッフルする関数
     function shuffleArray(array) {
@@ -134,13 +137,13 @@ document.addEventListener('DOMContentLoaded', () => {
         accuracyRateElement.textContent = `${accuracy.toFixed(1)}%`;
     }
 
-    // カードの内容を表示・非表示を切り替える関数 (めくる代わりに使う)
-    function toggleAnswerVisibility(show) {
-        if (show) {
+    // カードの内容（質問と解答）の表示・非表示を切り替える関数
+    function toggleContentVisibility(showAnswer) {
+        if (showAnswer) {
             answerElement.style.opacity = '1';
-            answerElement.style.pointerEvents = 'auto'; // クリックイベントを有効に
+            answerElement.style.pointerEvents = 'auto';
             questionElement.style.opacity = '0';
-            questionElement.style.pointerEvents = 'none'; // クリックイベントを無効に
+            questionElement.style.pointerEvents = 'none';
         } else {
             answerElement.style.opacity = '0';
             answerElement.style.pointerEvents = 'none';
@@ -148,6 +151,37 @@ document.addEventListener('DOMContentLoaded', () => {
             questionElement.style.pointerEvents = 'auto';
         }
     }
+
+    // 正解・不正解メッセージを表示する関数
+    function showFeedbackMessage(message, type) {
+        isShowingFeedback = true; // フィードバック表示中フラグを立てる
+        feedbackMessageElement.textContent = message;
+        feedbackMessageElement.className = 'feedback-message show'; // 基本クラスと表示クラス
+        if (type === 'correct') {
+            feedbackMessageElement.classList.add('correct');
+        } else if (type === 'incorrect') {
+            feedbackMessageElement.classList.add('incorrect');
+        }
+
+        // メッセージ表示中はカードのクリックを無効にする
+        flashcard.style.pointerEvents = 'none';
+
+        setTimeout(() => {
+            feedbackMessageElement.classList.remove('show');
+            feedbackMessageElement.classList.add('hide'); // フェードアウトアニメーション
+
+            setTimeout(() => {
+                feedbackMessageElement.className = 'feedback-message'; // クラスをリセット
+                isShowingFeedback = false; // フラグを解除
+                // メッセージが消えたらカードのクリックを再有効化
+                if (currentCardIndex < shuffledCards.length) { // 全問終了時以外
+                     flashcard.style.pointerEvents = 'auto';
+                }
+            }, 300); // hideアニメーションの時間を待つ (CSSのtransitionと合わせる)
+
+        }, 1000); // メッセージを表示する時間（1秒）
+    }
+
 
     // カードの内容を更新する関数
     function updateCard() {
@@ -160,23 +194,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 // 全ての問題を回答し終えた場合
                 questionElement.textContent = 'すべての問題を回答しました！';
                 answerElement.textContent = '学習お疲れ様でした！もう一度挑戦する場合は「次の問題」をクリックしてください。';
-                toggleAnswerVisibility(true); // 解答を強制的に表示
+                toggleContentVisibility(true); // 解答を強制的に表示
                 correctBtn.disabled = true;
                 incorrectBtn.disabled = true;
                 nextCardBtn.textContent = '最初からやり直す';
+                flashcard.style.pointerEvents = 'none'; // 全問終了時はカードクリック無効
             } else {
                 const currentCard = shuffledCards[currentCardIndex];
                 questionElement.textContent = currentCard.question;
                 answerElement.textContent = currentCard.answer;
-                toggleAnswerVisibility(false); // 次の問題は質問から表示（解答は非表示）
+                toggleContentVisibility(false); // 次の問題は質問から表示（解答は非表示）
                 nextCardBtn.textContent = '次の問題'; // テキストを元に戻す
                 correctBtn.disabled = false; // ボタンを再有効化
                 incorrectBtn.disabled = false;
+                flashcard.style.pointerEvents = 'auto'; // カードクリック有効化
             }
 
             // フェードイン
             flashcard.classList.remove('fade-out');
-            flashcard.classList.add('fade-in'); // 必要に応じて、ここでは `fade-in` クラスは必須ではないかもしれません。CSSの `transition: opacity` があれば十分です。
             // `fade-in` クラスは、次のフェードアウトに備えて削除しておく
             setTimeout(() => {
                 flashcard.classList.remove('fade-in');
@@ -192,58 +227,61 @@ document.addEventListener('DOMContentLoaded', () => {
         answeredQuestionsCount = 0;
         correctAnswersCount = 0;
         updateStats();
+        
         // 初期化時はフェードアウトを挟まず、直接表示
-        if (flashcard.classList.contains('fade-out')) {
-            flashcard.classList.remove('fade-out');
-        }
-        if (flashcard.classList.contains('fade-in')) {
-            flashcard.classList.remove('fade-in');
-        }
+        flashcard.classList.remove('fade-out', 'fade-in');
+        
         const initialCard = shuffledCards[currentCardIndex];
         questionElement.textContent = initialCard.question;
         answerElement.textContent = initialCard.answer;
-        toggleAnswerVisibility(false); // 質問から開始
+        toggleContentVisibility(false); // 質問から開始
         nextCardBtn.textContent = '次の問題';
         correctBtn.disabled = false;
         incorrectBtn.disabled = false;
+        flashcard.style.pointerEvents = 'auto'; // カードクリック有効化
     }
 
     // --- イベントリスナー ---
 
     // カードをクリックで解答の表示/非表示を切り替える
     flashcard.addEventListener('click', () => {
-        if (currentCardIndex < shuffledCards.length) {
-            // 現在解答が表示されているかどうかの状態を確認
+        // フィードバック表示中でない、かつ全問終了中でない場合のみフリップ
+        if (!isShowingFeedback && currentCardIndex < shuffledCards.length) {
             const isAnswerVisible = answerElement.style.opacity === '1';
-            toggleAnswerVisibility(!isAnswerVisible);
+            toggleContentVisibility(!isAnswerVisible);
         }
     });
 
     // 「正解！」ボタン
     correctBtn.addEventListener('click', () => {
         if (currentCardIndex < shuffledCards.length) {
+            showFeedbackMessage('正解！', 'correct'); // メッセージ表示
             answeredQuestionsCount++;
             correctAnswersCount++;
             updateStats();
             correctBtn.disabled = true;
             incorrectBtn.disabled = true;
-            toggleAnswerVisibility(true); // 解答を自動的に表示
+            toggleContentVisibility(true); // 解答を自動的に表示
         }
     });
 
     // 「不正解...」ボタン
     incorrectBtn.addEventListener('click', () => {
         if (currentCardIndex < shuffledCards.length) {
+            showFeedbackMessage('不正解...', 'incorrect'); // メッセージ表示
             answeredQuestionsCount++;
             updateStats();
             correctBtn.disabled = true;
             incorrectBtn.disabled = true;
-            toggleAnswerVisibility(true); // 解答を自動的に表示
+            toggleContentVisibility(true); // 解答を自動的に表示
         }
     });
 
     // 「次の問題」ボタン
     nextCardBtn.addEventListener('click', () => {
+        // フィードバック表示中は次の問題に進めないようにする
+        if (isShowingFeedback) return;
+
         if (currentCardIndex >= shuffledCards.length) {
             initializeQuiz(); // 全ての問題を回答し終えたらリセット
         } else {
