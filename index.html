@@ -3,15 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>勉強アプリ</title>
+    <title>ITパスポート 単語カード</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <h1>ITパスポート 単語カード</h1>
+
+    <div class="stats-container">
+        <p>回答数: <span id="answered-count">0</span></p>
+        <p>正解数: <span id="correct-count">0</span></p>
+        <p>正答率: <span id="accuracy-rate">0%</span></p>
+    </div>
+
     <div class="container">
         <div class="card" id="flashcard">
-            <div class="question" id="question"></div> <div class="answer" id="answer"></div>   </div>
-        <button id="nextCardBtn">次の問題</button>
+            <div class="question" id="question">
+                </div>
+            <div class="answer" id="answer">
+                </div>
+        </div>
+
+        <div class="controls">
+            <button id="correct-btn">正解！</button>
+            <button id="incorrect-btn">不正解...</button>
+            <button id="nextCardBtn">次の問題</button>
+        </div>
     </div>
+
     <script src="script.js"></script>
 </body>
 </html>
